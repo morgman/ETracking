@@ -1,0 +1,6 @@
+framework module Pods_ETDataCollection {
+  umbrella header "Pods-ETDataCollection-umbrella.h"
+
+  export *
+  module * { export * }
+}
