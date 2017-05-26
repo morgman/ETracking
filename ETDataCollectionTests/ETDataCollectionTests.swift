@@ -21,10 +21,30 @@ class ETDataCollectionTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testStoryboardConstructorShallCreateAnInstance() {
+        // ~given
+        var sb:UIStoryboard? = nil
+        
+        // ~when
+        sb = UIStoryboard(name: "Main", bundle: Bundle.main)
+        
+        // ~then
+        XCTAssertNotNil(sb, "Unable to instantiate Main Storyboard")
     }
+    
+    func testViewControllerConstructorShallCreateAnInstance() {
+        let sb = UIStoryboard(name: "Main", bundle: Bundle.main)
+
+        // ~given
+        var vc:UIViewController? = nil
+        
+        // ~when
+        vc = sb.instantiateViewController(withIdentifier: "ViewController")
+        
+        // ~then
+        XCTAssertNotNil(vc, "Unable to instantiate ViewController")
+    }
+
     
     func testPerformanceExample() {
         // This is an example of a performance test case.
