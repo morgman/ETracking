@@ -267,7 +267,7 @@ extension Foo: AVCaptureMetadataOutputObjectsDelegate {
             DDLogInfo("Face Count == \(faces.count)")
             //            var newColor = UIColor.red.cgColor
             //            var newWidth:CGFloat = 3.0
-            let maxFaceRect = self.findMaxFaceRect(faces)
+            _ = self.findMaxFaceRect(faces)
             //            if let recorderGuideView = self.recorderGuideView {
             //                let faceGuideIntersection = recorderGuideView.frame.intersection(maxFaceRect)
             //                if faceGuideIntersection != CGRect.null {
