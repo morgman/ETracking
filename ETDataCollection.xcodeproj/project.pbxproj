@@ -12,9 +12,10 @@
 		74E3C3A71ECF45A200584161 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74E3C3A51ECF45A200584161 /* Main.storyboard */; };
 		74E3C3A91ECF45A200584161 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74E3C3A81ECF45A200584161 /* Assets.xcassets */; };
 		74E3C3AC1ECF45A200584161 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74E3C3AA1ECF45A200584161 /* LaunchScreen.storyboard */; };
-		74E3C3B71ECF45A200584161 /* ETDataCollectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E3C3B61ECF45A200584161 /* ETDataCollectionTests.swift */; };
+		74E3C3B71ECF45A200584161 /* ViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E3C3B61ECF45A200584161 /* ViewControllerTest.swift */; };
 		74E3C3C21ECF45A200584161 /* ETDataCollectionUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E3C3C11ECF45A200584161 /* ETDataCollectionUITests.swift */; };
 		9C23DE16D124FB60CFB1D8C3 /* Pods_ETDataCollection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1049E58BE16F8C331693FEB /* Pods_ETDataCollection.framework */; };
+		D28AF7671ED8CDF300E26B3C /* Foo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28AF7661ED8CDF300E26B3C /* Foo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,12 +45,13 @@
 		74E3C3AB1ECF45A200584161 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		74E3C3AD1ECF45A200584161 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		74E3C3B21ECF45A200584161 /* ETDataCollectionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ETDataCollectionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		74E3C3B61ECF45A200584161 /* ETDataCollectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETDataCollectionTests.swift; sourceTree = "<group>"; };
+		74E3C3B61ECF45A200584161 /* ViewControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerTest.swift; sourceTree = "<group>"; };
 		74E3C3B81ECF45A200584161 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		74E3C3BD1ECF45A200584161 /* ETDataCollectionUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ETDataCollectionUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		74E3C3C11ECF45A200584161 /* ETDataCollectionUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETDataCollectionUITests.swift; sourceTree = "<group>"; };
 		74E3C3C31ECF45A200584161 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D1049E58BE16F8C331693FEB /* Pods_ETDataCollection.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ETDataCollection.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D28AF7661ED8CDF300E26B3C /* Foo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Foo.swift; sourceTree = "<group>"; };
 		D82A0DF7BFA429DDC9310A56 /* Pods-ETDataCollection.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ETDataCollection.release.xcconfig"; path = "Pods/Target Support Files/Pods-ETDataCollection/Pods-ETDataCollection.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -100,7 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				74E3C3A01ECF45A200584161 /* ETDataCollection */,
-				74E3C3B51ECF45A200584161 /* ETDataCollectionTests */,
+				74E3C3B51ECF45A200584161 /* Unit */,
 				74E3C3C01ECF45A200584161 /* ETDataCollectionUITests */,
 				74E3C39F1ECF45A200584161 /* Products */,
 				568897C7EC2C6A32F5510D23 /* Pods */,
@@ -123,6 +125,7 @@
 			children = (
 				74E3C3A11ECF45A200584161 /* AppDelegate.swift */,
 				74E3C3A31ECF45A200584161 /* ViewController.swift */,
+				D28AF7661ED8CDF300E26B3C /* Foo.swift */,
 				74E3C3A51ECF45A200584161 /* Main.storyboard */,
 				74E3C3A81ECF45A200584161 /* Assets.xcassets */,
 				74E3C3AA1ECF45A200584161 /* LaunchScreen.storyboard */,
@@ -131,12 +134,13 @@
 			path = ETDataCollection;
 			sourceTree = "<group>";
 		};
-		74E3C3B51ECF45A200584161 /* ETDataCollectionTests */ = {
+		74E3C3B51ECF45A200584161 /* Unit */ = {
 			isa = PBXGroup;
 			children = (
-				74E3C3B61ECF45A200584161 /* ETDataCollectionTests.swift */,
+				74E3C3B61ECF45A200584161 /* ViewControllerTest.swift */,
 				74E3C3B81ECF45A200584161 /* Info.plist */,
 			);
+			name = Unit;
 			path = ETDataCollectionTests;
 			sourceTree = "<group>";
 		};
@@ -220,7 +224,7 @@
 				TargetAttributes = {
 					74E3C39D1ECF45A200584161 = {
 						CreatedOnToolsVersion = 8.3.1;
-						DevelopmentTeam = ST3WRPSGPR;
+						DevelopmentTeam = 4RBF63Q383;
 						ProvisioningStyle = Automatic;
 					};
 					74E3C3B11ECF45A200584161 = {
@@ -338,6 +342,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				74E3C3A41ECF45A200584161 /* ViewController.swift in Sources */,
+				D28AF7671ED8CDF300E26B3C /* Foo.swift in Sources */,
 				74E3C3A21ECF45A200584161 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -346,7 +351,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				74E3C3B71ECF45A200584161 /* ETDataCollectionTests.swift in Sources */,
+				74E3C3B71ECF45A200584161 /* ViewControllerTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -493,11 +498,11 @@
 			baseConfigurationReference = 5264FF1FB29816AE17E0B95F /* Pods-ETDataCollection.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = ST3WRPSGPR;
+				DEVELOPMENT_TEAM = 4RBF63Q383;
 				INFOPLIST_FILE = ETDataCollection/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = enterprise.aol.roguetwo.ETDataCollection;
+				PRODUCT_BUNDLE_IDENTIFIER = com.amado.ETDataCollection;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -508,11 +513,11 @@
 			baseConfigurationReference = D82A0DF7BFA429DDC9310A56 /* Pods-ETDataCollection.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = ST3WRPSGPR;
+				DEVELOPMENT_TEAM = 4RBF63Q383;
 				INFOPLIST_FILE = ETDataCollection/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = enterprise.aol.roguetwo.ETDataCollection;
+				PRODUCT_BUNDLE_IDENTIFIER = com.amado.ETDataCollection;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
