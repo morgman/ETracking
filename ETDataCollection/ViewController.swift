@@ -13,6 +13,8 @@ import CocoaLumberjack
 
 class ViewController: UIViewController {
 
+    @IBOutlet open weak var previewView: UIView?
+    
     fileprivate enum SessionSetupResult {
         case initializing
         case success
@@ -22,6 +24,8 @@ class ViewController: UIViewController {
         case configurationFailed
     }
     fileprivate var setupResult: SessionSetupResult = .success
+    fileprivate var commentPlayer = AVPlayer()
+
 
     var countdownTimer:Timer?
     var captureSession:AVCaptureSession?
@@ -61,6 +65,12 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.processRecordingPermission), name: NSNotification.Name(rawValue: self.recordingPermissionCompleted), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.itemDidFinishPlaying), name:NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+
+        
+        if let previewView = self.previewView {
+            previewView.isHidden = true
+        }
 
     }
 
@@ -123,7 +133,7 @@ class ViewController: UIViewController {
                 videoFailedAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction) in
                     DDLogWarn("Placeholder")
                     self.videoSetup()
-                    self.captureUserMovement()
+//                    self.captureUserMovement()
                     
                 }))
                 
@@ -191,9 +201,9 @@ class ViewController: UIViewController {
     func beginSession() {
         DDLogInfo("Beginning Video Session")
         let err : NSError? = nil
-        if let captureSession = self.captureSession {
+        if let captureSession = self.captureSession, let captureDevice = self.captureDevice {
             
-            captureSession.addInput(self.deviceInputFromDevice(self.captureDevice)) //(cDevice)  //AVCaptureDeviceInput(device: captureDevice, error: &err))
+            captureSession.addInput(self.deviceInputFromDevice(captureDevice)) //(cDevice)  //AVCaptureDeviceInput(device: captureDevice, error: &err))
             
             let metadataOutput = AVCaptureMetadataOutput()
             
@@ -216,6 +226,9 @@ class ViewController: UIViewController {
                 aPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
                 self.previewLayer = aPreviewLayer
                 captureSession.startRunning()
+                
+                self.captureUserMovement()
+
             } else {
                 DDLogWarn("Unable to create an AVCaptureCideoPreviewLayer")
             }
@@ -241,10 +254,34 @@ class ViewController: UIViewController {
     }
 
     
+    open func itemDidFinishPlaying(_ notification: Notification) {
+        if let previewView = self.previewView {
+            previewView.isHidden = true
+        }
+    }
+    
     func endEyeTracking() {
         self.stopRecording()
         
+        
+        
         DispatchQueue.main.async(execute: { () -> Void in
+            
+            if let previewView = self.previewView {
+                previewView.isHidden = false
+                
+                self.commentPlayer = AVPlayer()
+                self.commentPlayer = AVPlayer.init(url: self.tempFilePath)//[AVPlayer playerWithURL:fileURL];
+                self.commentPlayer.actionAtItemEnd = .none
+                
+                let aPlayerLayer = AVPlayerLayer.init(player: self.commentPlayer)
+                aPlayerLayer.backgroundColor = UIColor.blue.cgColor
+                previewView.layer.addSublayer(aPlayerLayer)
+                aPlayerLayer.frame = previewView.bounds
+                aPlayerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+                self.commentPlayer.play()
+            }
+
             
             let videoFailedAlert = UIAlertController(title: "Recording complete", message: "View recording at \(self.tempFilePath)", preferredStyle: UIAlertControllerStyle.alert)
             videoFailedAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction) in
