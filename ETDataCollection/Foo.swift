@@ -11,7 +11,8 @@ class Foo : NSObject {
     var captureDevice:AVCaptureDevice?
     var previewLayer:AVCaptureVideoPreviewLayer?
     var viewController:ViewController?
-    
+
+    fileprivate var commentPlayer = AVPlayer()
     fileprivate var sessionQueue: DispatchQueue = DispatchQueue(label: "videoQueue", attributes: [])
     fileprivate var setupResult: SessionSetupResult = .success
     fileprivate var tempFilePath: URL = {
@@ -52,6 +53,17 @@ class Foo : NSObject {
 
     open func viewDidLoad() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.processRecordingPermission), name: NSNotification.Name(rawValue: self.recordingPermissionCompleted), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.itemDidFinishPlaying), name:NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+        
+        if let previewView = self.viewController?.previewView {
+            previewView.isHidden = true
+        }
+    }
+
+    open func itemDidFinishPlaying(_ notification: Notification) {
+        if let previewView = self.viewController?.previewView {
+            previewView.isHidden = true
+        }
     }
     
     open func viewDidAppear(_ animated: Bool) {
@@ -97,9 +109,9 @@ class Foo : NSObject {
     func beginSession() {
         DDLogInfo("Beginning Video Session")
         let err : NSError? = nil
-        if let captureSession = self.captureSession {
+        if let captureSession = self.captureSession, let captureDevice = self.captureDevice {
             
-            captureSession.addInput(self.deviceInputFromDevice(self.captureDevice)) //(cDevice)  //AVCaptureDeviceInput(device: captureDevice, error: &err))
+            captureSession.addInput(self.deviceInputFromDevice(captureDevice)) //(cDevice)  //AVCaptureDeviceInput(device: captureDevice, error: &err))
             
             let metadataOutput = AVCaptureMetadataOutput()
             
@@ -122,6 +134,7 @@ class Foo : NSObject {
                 aPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
                 self.previewLayer = aPreviewLayer
                 captureSession.startRunning()
+                self.captureUserMovement()
             } else {
                 DDLogWarn("Unable to create an AVCaptureCideoPreviewLayer")
             }
@@ -150,6 +163,19 @@ class Foo : NSObject {
         self.stopRecording()
         
         DispatchQueue.main.async(execute: { () -> Void in
+            if let previewView = self.viewController?.previewView {
+                previewView.isHidden = false
+                self.commentPlayer = AVPlayer()
+                self.commentPlayer = AVPlayer.init(url: self.tempFilePath)//[AVPlayer playerWithURL:fileURL];
+                self.commentPlayer.actionAtItemEnd = .none
+
+                let aPlayerLayer = AVPlayerLayer.init(player: self.commentPlayer)
+                aPlayerLayer.backgroundColor = UIColor.blue.cgColor
+                previewView.layer.addSublayer(aPlayerLayer)
+                aPlayerLayer.frame = previewView.bounds
+                aPlayerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+                self.commentPlayer.play()
+            }
             
             let videoFailedAlert = UIAlertController(title: "Recording complete", message: "View recording at \(self.tempFilePath)", preferredStyle: UIAlertControllerStyle.alert)
             videoFailedAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction) in
