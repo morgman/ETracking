@@ -1,56 +1,37 @@
-//
-//  ETDataCollectionTests.swift
-//  ETDataCollectionTests
-//
-//  Created by Jones, Morgan on 5/19/17.
-//  Copyright © 2017 Jones, Morgan. All rights reserved.
-//
-
 import XCTest
 @testable import ETDataCollection
 
-class ETDataCollectionTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+class MockNSCoder : NSCoder {
+
+    override func version(forClassName className: String) -> Int {
+        return 0
     }
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
+    override func decodeObject(forKey key: String) -> Any? {
+        return nil
     }
     
-    func testStoryboardConstructorShallCreateAnInstance() {
+    override func decodeBool(forKey key: String) -> Bool {
+        return false
+    }
+    
+    override func containsValue(forKey key: String) -> Bool {
+        return false
+    }
+}
+
+class ViewControllerTest: XCTestCase {
+    
+    func testConstructorShallCreateAnInstance() {
+        let mockNSCoder = MockNSCoder.init()
+        
         // ~given
-        var sb:UIStoryboard? = nil
+        var controller:ViewController? = nil
         
         // ~when
-        sb = UIStoryboard(name: "Main", bundle: Bundle.main)
-        
-        // ~then
-        XCTAssertNotNil(sb, "Unable to instantiate Main Storyboard")
-    }
-    
-    func testViewControllerConstructorShallCreateAnInstance() {
-        let sb = UIStoryboard(name: "Main", bundle: Bundle.main)
+        controller = ViewController.init(coder: mockNSCoder)
 
-        // ~given
-        var vc:UIViewController? = nil
-        
-        // ~when
-        vc = sb.instantiateViewController(withIdentifier: "ViewController")
-        
         // ~then
-        XCTAssertNotNil(vc, "Unable to instantiate ViewController")
+        XCTAssert(controller != nil)
     }
-
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-    
 }
