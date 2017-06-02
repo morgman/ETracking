@@ -7,13 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7474E9211ED8812000C79599 /* ETDataObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7474E9201ED8812000C79599 /* ETDataObserverTests.swift */; };
 		74E3C3A21ECF45A200584161 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E3C3A11ECF45A200584161 /* AppDelegate.swift */; };
 		74E3C3A41ECF45A200584161 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E3C3A31ECF45A200584161 /* ViewController.swift */; };
 		74E3C3A71ECF45A200584161 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74E3C3A51ECF45A200584161 /* Main.storyboard */; };
 		74E3C3A91ECF45A200584161 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74E3C3A81ECF45A200584161 /* Assets.xcassets */; };
 		74E3C3AC1ECF45A200584161 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74E3C3AA1ECF45A200584161 /* LaunchScreen.storyboard */; };
-		74E3C3B71ECF45A200584161 /* ViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E3C3B61ECF45A200584161 /* ViewControllerTest.swift */; };
+		74E3C3B71ECF45A200584161 /* ETDataCollectionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E3C3B61ECF45A200584161 /* ETDataCollectionTest.swift */; };
 		74E3C3C21ECF45A200584161 /* ETDataCollectionUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E3C3C11ECF45A200584161 /* ETDataCollectionUITests.swift */; };
 		9C23DE16D124FB60CFB1D8C3 /* Pods_ETDataCollection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1049E58BE16F8C331693FEB /* Pods_ETDataCollection.framework */; };
 		D28AF7671ED8CDF300E26B3C /* Foo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28AF7661ED8CDF300E26B3C /* Foo.swift */; };
@@ -38,7 +37,6 @@
 
 /* Begin PBXFileReference section */
 		5264FF1FB29816AE17E0B95F /* Pods-ETDataCollection.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ETDataCollection.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ETDataCollection/Pods-ETDataCollection.debug.xcconfig"; sourceTree = "<group>"; };
-		7474E9201ED8812000C79599 /* ETDataObserverTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ETDataObserverTests.swift; sourceTree = "<group>"; };
 		74E3C39E1ECF45A200584161 /* ETDataCollection.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ETDataCollection.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74E3C3A11ECF45A200584161 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		74E3C3A31ECF45A200584161 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -47,8 +45,7 @@
 		74E3C3AB1ECF45A200584161 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		74E3C3AD1ECF45A200584161 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		74E3C3B21ECF45A200584161 /* ETDataCollectionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ETDataCollectionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		74E3C3B61ECF45A200584161 /* ViewControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerTest.swift; sourceTree = "<group>"; };
-		74E3C3B81ECF45A200584161 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		74E3C3B61ECF45A200584161 /* ETDataCollectionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETDataCollectionTest.swift; sourceTree = "<group>"; };
 		74E3C3BD1ECF45A200584161 /* ETDataCollectionUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ETDataCollectionUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		74E3C3C11ECF45A200584161 /* ETDataCollectionUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETDataCollectionUITests.swift; sourceTree = "<group>"; };
 		74E3C3C31ECF45A200584161 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -103,8 +100,8 @@
 		74E3C3951ECF45A200584161 = {
 			isa = PBXGroup;
 			children = (
+				D282B3661EE1FA4A00847430 /* ETDataCollectionTests */,
 				74E3C3A01ECF45A200584161 /* ETDataCollection */,
-				74E3C3B51ECF45A200584161 /* Unit */,
 				74E3C3C01ECF45A200584161 /* ETDataCollectionUITests */,
 				74E3C39F1ECF45A200584161 /* Products */,
 				568897C7EC2C6A32F5510D23 /* Pods */,
@@ -136,17 +133,6 @@
 			path = ETDataCollection;
 			sourceTree = "<group>";
 		};
-		74E3C3B51ECF45A200584161 /* Unit */ = {
-			isa = PBXGroup;
-			children = (
-				74E3C3B61ECF45A200584161 /* ViewControllerTest.swift */,
-				74E3C3B81ECF45A200584161 /* Info.plist */,
-				7474E9201ED8812000C79599 /* ETDataObserverTests.swift */,
-			);
-			name = Unit;
-			path = ETDataCollectionTests;
-			sourceTree = "<group>";
-		};
 		74E3C3C01ECF45A200584161 /* ETDataCollectionUITests */ = {
 			isa = PBXGroup;
 			children = (
@@ -155,6 +141,14 @@
 			);
 			path = ETDataCollectionUITests;
 			sourceTree = "<group>";
+		};
+		D282B3661EE1FA4A00847430 /* ETDataCollectionTests */ = {
+			isa = PBXGroup;
+			children = (
+				74E3C3B61ECF45A200584161 /* ETDataCollectionTest.swift */,
+			);
+			path = ETDataCollectionTests;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -354,9 +348,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				74E3C3B71ECF45A200584161 /* ViewControllerTest.swift in Sources */,
-				74E3C3B71ECF45A200584161 /* ETDataCollectionTests.swift in Sources */,
-				7474E9211ED8812000C79599 /* ETDataObserverTests.swift in Sources */,
+				74E3C3B71ECF45A200584161 /* ETDataCollectionTest.swift in Sources */,
+				74E3C3B71ECF45A200584161 /* ETDataCollectionTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
