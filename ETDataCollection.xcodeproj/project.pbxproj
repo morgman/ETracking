@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7474E9211ED8812000C79599 /* ETDataObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7474E9201ED8812000C79599 /* ETDataObserverTests.swift */; };
 		74E3C3A21ECF45A200584161 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E3C3A11ECF45A200584161 /* AppDelegate.swift */; };
 		74E3C3A41ECF45A200584161 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E3C3A31ECF45A200584161 /* ViewController.swift */; };
 		74E3C3A71ECF45A200584161 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74E3C3A51ECF45A200584161 /* Main.storyboard */; };
@@ -37,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		5264FF1FB29816AE17E0B95F /* Pods-ETDataCollection.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ETDataCollection.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ETDataCollection/Pods-ETDataCollection.debug.xcconfig"; sourceTree = "<group>"; };
+		7474E9201ED8812000C79599 /* ETDataObserverTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ETDataObserverTests.swift; sourceTree = "<group>"; };
 		74E3C39E1ECF45A200584161 /* ETDataCollection.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ETDataCollection.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74E3C3A11ECF45A200584161 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		74E3C3A31ECF45A200584161 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 			children = (
 				74E3C3B61ECF45A200584161 /* ViewControllerTest.swift */,
 				74E3C3B81ECF45A200584161 /* Info.plist */,
+				7474E9201ED8812000C79599 /* ETDataObserverTests.swift */,
 			);
 			name = Unit;
 			path = ETDataCollectionTests;
@@ -352,6 +355,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				74E3C3B71ECF45A200584161 /* ViewControllerTest.swift in Sources */,
+				74E3C3B71ECF45A200584161 /* ETDataCollectionTests.swift in Sources */,
+				7474E9211ED8812000C79599 /* ETDataObserverTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
