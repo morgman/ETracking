@@ -227,7 +227,7 @@ class ViewController: UIViewController {
                 self.previewLayer = aPreviewLayer
                 captureSession.startRunning()
                 
-                self.captureUserMovement()
+                self.captureUserMovement() // TODO:  Added here just to insure order of operations worked out correctly, where should it go?
 
             } else {
                 DDLogWarn("Unable to create an AVCaptureCideoPreviewLayer")
