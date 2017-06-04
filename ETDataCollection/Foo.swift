@@ -1,6 +1,10 @@
 import AVFoundation
 import CocoaLumberjack
 
+struct SketchAnimation {
+    // represents some fully-generated animation that's ready to play by the end user
+}
+
 class Foo : NSObject {
     let recordingPermissionCompleted = "recordingPermissionCompleted"
 
@@ -10,8 +14,10 @@ class Foo : NSObject {
     var movieOutput = AVCaptureMovieFileOutput()
     var captureDevice:AVCaptureDevice?
     var previewLayer:AVCaptureVideoPreviewLayer?
-    var viewController:ViewController?
-
+    var alert:((_ view: UIViewController) -> Void)?
+    var previewView: UIView?
+    var bounds: CGRect?
+    
     fileprivate var commentPlayer = AVPlayer()
     fileprivate var sessionQueue: DispatchQueue = DispatchQueue(label: "videoQueue", attributes: [])
     fileprivate var setupResult: SessionSetupResult = .success
@@ -47,21 +53,23 @@ class Foo : NSObject {
         }
     }
 
-    init(viewController:ViewController) {
-        self.viewController = viewController
+    init(alert: @escaping (_ view: UIViewController) -> Void) {
+        self.alert = alert
     }
 
-    open func viewDidLoad() {
+    open func viewDidLoad(bounds:CGRect, previewView:UIView) {
         NotificationCenter.default.addObserver(self, selector: #selector(self.processRecordingPermission), name: NSNotification.Name(rawValue: self.recordingPermissionCompleted), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.itemDidFinishPlaying), name:NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
         
-        if let previewView = self.viewController?.previewView {
+        self.bounds = bounds
+        self.previewView = previewView
+        if let previewView = self.previewView {
             previewView.isHidden = true
         }
     }
 
     open func itemDidFinishPlaying(_ notification: Notification) {
-        if let previewView = self.viewController?.previewView {
+        if let previewView = self.previewView {
             previewView.isHidden = true
         }
     }
@@ -84,9 +92,7 @@ class Foo : NSObject {
                     
                 }))
                 
-                self.viewController?.present(videoFailedAlert, animated: true, completion: {
-                })
-                
+                self.alert!(videoFailedAlert)
             })
         } else {
             
@@ -97,8 +103,7 @@ class Foo : NSObject {
                     DDLogWarn("Placeholder")
                 }))
                 
-                self.viewController?.present(videoFailedAlert, animated: true, completion: {
-                })
+                self.alert!(videoFailedAlert)
             })
             
             
@@ -130,7 +135,7 @@ class Foo : NSObject {
                 DDLogError("error: \(theError.localizedDescription)")
             }
             if let aPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession) {
-                aPreviewLayer.frame = (self.viewController?.view.bounds)!
+                aPreviewLayer.frame = bounds!
                 aPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
                 self.previewLayer = aPreviewLayer
                 captureSession.startRunning()
@@ -163,7 +168,7 @@ class Foo : NSObject {
         self.stopRecording()
         
         DispatchQueue.main.async(execute: { () -> Void in
-            if let previewView = self.viewController?.previewView {
+            if let previewView = self.previewView {
                 previewView.isHidden = false
                 self.commentPlayer = AVPlayer()
                 self.commentPlayer = AVPlayer.init(url: self.tempFilePath)//[AVPlayer playerWithURL:fileURL];
@@ -182,9 +187,7 @@ class Foo : NSObject {
                 DDLogWarn("Placeholder")
             }))
             
-            self.viewController?.present(videoFailedAlert, animated: true, completion: {
-            })
-            
+            self.alert!(videoFailedAlert)
         })
         
     }

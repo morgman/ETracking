@@ -10,20 +10,19 @@ import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet open weak var previewView: UIView?
-    
+
     var guideRectCALayer:CALayer?
     var foo:Foo?
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-
-        foo = Foo.init(viewController:self)
+        foo = Foo.init(alert: alert)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        foo?.viewDidLoad()
+        foo?.viewDidLoad(bounds:view.bounds, previewView: previewView!)
     }
 
     override func didReceiveMemoryWarning() {
@@ -34,5 +33,9 @@ class ViewController: UIViewController {
         super.viewDidAppear(animated)
         
         foo?.viewDidAppear(animated)
+    }
+    
+    open func alert(view:UIViewController) {
+        present(view, animated: true, completion: {})
     }
 }
