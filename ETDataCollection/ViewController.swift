@@ -9,6 +9,8 @@
 import UIKit
 import AVFoundation
 import CocoaLumberjack
+import Photos
+
 
 
 class ViewController: UIViewController {
@@ -27,6 +29,7 @@ class ViewController: UIViewController {
     fileprivate var commentPlayer = AVPlayer()
 
 
+    var stillImageOutput:AVCaptureStillImageOutput?
     var countdownTimer:Timer?
     var captureSession:AVCaptureSession?
     var captureDevice:AVCaptureDevice?
@@ -95,8 +98,9 @@ class ViewController: UIViewController {
             // The user has previously granted access to the camera.
             DDLogInfo("Already Authorized to access video")
             self.setupResult = .success
+            self.checkPhotoLibraryPermission()
 
-            NotificationCenter.default.post(name: Notification.Name(rawValue: self.recordingPermissionCompleted), object: nil )
+            //NotificationCenter.default.post(name: Notification.Name(rawValue: self.recordingPermissionCompleted), object: nil )
             
         case .notDetermined:
             /*
@@ -114,7 +118,9 @@ class ViewController: UIViewController {
                 } else {
                     self.setupResult = .success
                     DDLogInfo("Authorized to access video")
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: self.recordingPermissionCompleted), object: nil )
+                    self.checkPhotoLibraryPermission()
+
+                    //NotificationCenter.default.post(name: Notification.Name(rawValue: self.recordingPermissionCompleted), object: nil )
                 }
             })
         default:
@@ -123,6 +129,33 @@ class ViewController: UIViewController {
             NotificationCenter.default.post(name: Notification.Name(rawValue: self.recordingPermissionCompleted), object: nil )
         }
     }
+    
+    open func checkPhotoLibraryPermission() {
+        
+        let status = PHPhotoLibrary.authorizationStatus()
+        print(status)
+        switch status {
+        case .authorized:
+            DDLogInfo("Already Authorized to access photo library")
+            self.setupResult = .success
+            NotificationCenter.default.post(name: Notification.Name(rawValue: self.recordingPermissionCompleted), object: nil )
+            
+        case .notDetermined, .restricted:
+            PHPhotoLibrary.requestAuthorization({ [unowned self] granted in
+                if granted == PHAuthorizationStatus.denied {
+                    self.setupResult = .photoLibraryNotAuthorized
+                } else {
+                    DDLogInfo("Authorized to access photo library")
+                    self.setupResult = .success
+                }
+                NotificationCenter.default.post(name: Notification.Name(rawValue: self.recordingPermissionCompleted), object: nil )
+            })
+        default:
+            setupResult = .photoLibraryNotAuthorized
+            NotificationCenter.default.post(name: Notification.Name(rawValue: self.recordingPermissionCompleted), object: nil )
+        }
+    }
+
     
     open func processRecordingPermission(_ notification: Notification) {
         if self.setupResult == .success {
@@ -167,6 +200,8 @@ class ViewController: UIViewController {
         DispatchQueue.main.async(execute: { () -> Void in
             
             let captureSession = AVCaptureSession()
+            self.stillImageOutput = AVCaptureStillImageOutput()
+
             if let deviceSession = AVCaptureDeviceDiscoverySession.init(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaTypeVideo, position: .front) {
                 captureSession.beginConfiguration()
                 captureSession.sessionPreset = AVCaptureSessionPresetHigh
@@ -217,6 +252,15 @@ class ViewController: UIViewController {
                 DDLogWarn("Cannot add metadataOutput to capture Session")
             }
             captureSession.addOutput(self.movieOutput)
+            
+            if let stillImageOutput = self.stillImageOutput {
+                stillImageOutput.outputSettings = [AVVideoCodecKey:AVVideoCodecJPEG]
+                if captureSession.canAddOutput(stillImageOutput) {
+                    captureSession.addOutput(stillImageOutput)
+                }
+            } else {
+                DDLogWarn("No Still Image Output available to add to capture Session")
+            }
             
             if let theError = err {
                 DDLogError("error: \(theError.localizedDescription)")
@@ -326,6 +370,28 @@ extension ViewController:  AVCaptureMetadataOutputObjectsDelegate {
 //            var newColor = UIColor.red.cgColor
 //            var newWidth:CGFloat = 3.0
             let maxFaceRect = self.findMaxFaceRect(faces)
+            
+            if let videoConnection = self.stillImageOutput, let validatedConnection = videoConnection.connection(withMediaType: AVMediaTypeVideo) {
+                videoConnection.captureStillImageAsynchronously(from: validatedConnection) {
+                    (imageDataSampleBuffer, error) -> Void in
+                    
+                    if let validatedError = error {
+                        DDLogWarn("Error capturing Still Image error = \(validatedError)")
+
+                    } else {
+                    if let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer) {
+                        if let validUIImage = UIImage(data: imageData) {
+                            UIImageWriteToSavedPhotosAlbum(validUIImage, nil, nil, nil)
+                        } else {
+                            DDLogWarn("Valid UIImage could not be created from data")
+                        }
+                    } else {
+                        DDLogWarn("No Image Data to save")
+                    }
+                    }
+                }
+            }
+            
 //            if let recorderGuideView = self.recorderGuideView {
 //                let faceGuideIntersection = recorderGuideView.frame.intersection(maxFaceRect)
 //                if faceGuideIntersection != CGRect.null {
