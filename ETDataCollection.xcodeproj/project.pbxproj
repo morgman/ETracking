@@ -15,6 +15,7 @@
 		74E3C3C21ECF45A200584161 /* ETDataCollectionUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E3C3C11ECF45A200584161 /* ETDataCollectionUITests.swift */; };
 		9C23DE16D124FB60CFB1D8C3 /* Pods_ETDataCollection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1049E58BE16F8C331693FEB /* Pods_ETDataCollection.framework */; };
 		D28AF7671ED8CDF300E26B3C /* Foo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28AF7661ED8CDF300E26B3C /* Foo.swift */; };
+		D2D1179D1EEB3419005CE1AC /* DeviceUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D1179C1EEB3419005CE1AC /* DeviceUtil.swift */; };
 		D2FD55821EE2065A001A689C /* ETDataCollectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FD55811EE2065A001A689C /* ETDataCollectionTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +51,7 @@
 		74E3C3C31ECF45A200584161 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D1049E58BE16F8C331693FEB /* Pods_ETDataCollection.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ETDataCollection.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D28AF7661ED8CDF300E26B3C /* Foo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Foo.swift; sourceTree = "<group>"; };
+		D2D1179C1EEB3419005CE1AC /* DeviceUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceUtil.swift; sourceTree = "<group>"; };
 		D2FD55811EE2065A001A689C /* ETDataCollectionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ETDataCollectionTests.swift; sourceTree = "<group>"; };
 		D82A0DF7BFA429DDC9310A56 /* Pods-ETDataCollection.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ETDataCollection.release.xcconfig"; path = "Pods/Target Support Files/Pods-ETDataCollection/Pods-ETDataCollection.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -129,6 +131,7 @@
 				74E3C3A81ECF45A200584161 /* Assets.xcassets */,
 				74E3C3AA1ECF45A200584161 /* LaunchScreen.storyboard */,
 				74E3C3AD1ECF45A200584161 /* Info.plist */,
+				D2D1179C1EEB3419005CE1AC /* DeviceUtil.swift */,
 			);
 			path = ETDataCollection;
 			sourceTree = "<group>";
@@ -339,6 +342,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				74E3C3A41ECF45A200584161 /* ViewController.swift in Sources */,
+				D2D1179D1EEB3419005CE1AC /* DeviceUtil.swift in Sources */,
 				D28AF7671ED8CDF300E26B3C /* Foo.swift in Sources */,
 				74E3C3A21ECF45A200584161 /* AppDelegate.swift in Sources */,
 			);

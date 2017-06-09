@@ -235,39 +235,17 @@ class Foo : NSObject {
     }
 
     func videoSetup() {
-        
         DDLogInfo("Setting up Video")
         movieOutput = AVCaptureMovieFileOutput()
         DispatchQueue.main.async(execute: { () -> Void in
-            
+            self.captureDevice = DeviceUtil().getFrontCameraDevice()
+
             let captureSession = AVCaptureSession()
-            if let deviceSession = AVCaptureDeviceDiscoverySession.init(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaTypeVideo, position: .front) {
-                captureSession.beginConfiguration()
-                captureSession.sessionPreset = AVCaptureSessionPresetHigh
-                if let devices:[AVCaptureDevice] = deviceSession.devices {
-                    //            if let devices:[AVCaptureDevice] = AVCaptureDevice.devices() as? [AVCaptureDevice] {
-                    for device in devices {
-                        if (device.hasMediaType(AVMediaTypeVideo)) {
-                            
-                            if(device.position == AVCaptureDevicePosition.front) {
-                                if(device.isFocusModeSupported(AVCaptureFocusMode.continuousAutoFocus)) {
-                                    do {
-                                        try device.lockForConfiguration()
-                                        device.focusMode = AVCaptureFocusMode.continuousAutoFocus
-                                        device.unlockForConfiguration()
-                                    } catch let error as NSError {
-                                        DDLogError("Error attempting to lock device for configuration: '\(error.localizedDescription)'")
-                                    }
-                                }
-                                
-                                self.captureDevice = device
-                            }
-                        }
-                    }
-                }
-            }
+            captureSession.beginConfiguration ()
+            captureSession.sessionPreset = AVCaptureSessionPresetHigh
             captureSession.commitConfiguration()
             self.captureSession = captureSession
+
             self.beginSession()
         })
     }
