@@ -101,17 +101,9 @@ class Foo : NSObject {
                 self.alert!(videoFailedAlert)
             })
         } else {
-            
             DispatchQueue.main.async(execute: { () -> Void in
-                
-                let videoFailedAlert = UIAlertController(title: "Permission Denied", message: "User denied access to record video comment.", preferredStyle: UIAlertControllerStyle.alert)
-                videoFailedAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction) in
-                    DDLogWarn("Placeholder")
-                }))
-                
-                self.alert!(videoFailedAlert)
+                self.alert!(AlertUtil().getPermissionDeniedAlert()!)
             })
-            
             
             DDLogError("Unable to record comment permission denied by user: \(self.setupResult)")
         }
@@ -159,13 +151,8 @@ class Foo : NSObject {
         DispatchQueue.main.async(execute: { () -> Void in
             let player = Player()
             player.play(previewView: self.previewView!, tempFilePath: self.tempFilePath)
-
-            let videoFailedAlert = UIAlertController(title: "Recording complete", message: "View recording at \(self.tempFilePath)", preferredStyle: UIAlertControllerStyle.alert)
-            videoFailedAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction) in
-                DDLogWarn("Placeholder")
-            }))
             
-            self.alert!(videoFailedAlert)
+            self.alert!(AlertUtil().getRecordingCompleteAlert(tempFilePath: self.tempFilePath)!)
         })
         
     }
