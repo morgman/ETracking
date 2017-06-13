@@ -11,7 +11,6 @@ class Foo : NSObject {
     var faceRectCALayer:CALayer?
     var countdownTimer:Timer?
     var captureSession:AVCaptureSession?
-    var movieOutput = AVCaptureMovieFileOutput()
     var captureDevice:AVCaptureDevice?
     var previewLayer:AVCaptureVideoPreviewLayer?
     var alert:((_ view: UIViewController) -> Void)?
@@ -237,7 +236,6 @@ class Foo : NSObject {
 
             self.recorder = Recorder(
                 captureSession: self.captureSession!,
-                movieOutput: self.movieOutput,
                 tempFilePath: self.tempFilePath)
 
             self.beginSession()

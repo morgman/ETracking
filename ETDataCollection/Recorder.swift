@@ -6,13 +6,10 @@ class Recorder : NSObject {
     var captureSession:AVCaptureSession?
     var tempFilePath: URL?
     
-    init(captureSession: AVCaptureSession,
-        movieOutput: AVCaptureMovieFileOutput,
-        tempFilePath: URL) {
-
+    init(captureSession: AVCaptureSession, tempFilePath: URL) {
         self.tempFilePath = tempFilePath
         self.captureSession = captureSession
-        self.movieOutput = movieOutput
+        self.movieOutput = AVCaptureMovieFileOutput()
 
         self.captureSession?.addOutput(self.movieOutput)
     }
