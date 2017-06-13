@@ -17,6 +17,7 @@ class Foo : NSObject {
     var alert:((_ view: UIViewController) -> Void)?
     var previewView: UIView?
     var bounds: CGRect?
+    var recorder: Recorder?
     
     fileprivate var commentPlayer = AVPlayer()
     fileprivate var sessionQueue: DispatchQueue = DispatchQueue(label: "videoQueue", attributes: [])
@@ -84,13 +85,20 @@ class Foo : NSObject {
             DispatchQueue.main.async(execute: { () -> Void in
                 DDLogInfo("Display Alert indicating Test should start")
                 
-                let videoFailedAlert = UIAlertController(title: "Permission Granted", message: "Start Testing Now...", preferredStyle: UIAlertControllerStyle.alert)
-                videoFailedAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction) in
-                    DDLogWarn("Placeholder")
-                    self.videoSetup()
-                    self.captureUserMovement()
-                    
-                }))
+                let videoFailedAlert = UIAlertController(
+                    title: "Permission Granted",
+                    message: "Start Testing Now...",
+                    preferredStyle: UIAlertControllerStyle.alert)
+
+                videoFailedAlert.addAction(UIAlertAction(
+                    title: "Ok",
+                    style: .default,
+                    handler: { (action: UIAlertAction) in
+                        DDLogWarn("Placeholder")
+                        self.videoSetup()
+                        self.captureUserMovement()
+                    }
+                ))
                 
                 self.alert!(videoFailedAlert)
             })
@@ -147,14 +155,6 @@ class Foo : NSObject {
             DDLogWarn("recorder variables null unable to begin session.")
         }
     }
-
-    func startRecording() {
-        if let _ = self.captureSession {
-            movieOutput.startRecording(toOutputFileURL: tempFilePath, recordingDelegate: self)
-        } else {
-            DDLogWarn("Unable to start Recording, no capture Session")
-        }
-    }
     
     func stopRecording() {
         
@@ -193,8 +193,12 @@ class Foo : NSObject {
     }
 
     open func captureUserMovement() {
-        
-        self.startRecording()
+        if let _ = self.captureSession {
+            recorder?.startRecording(tempFilePath: self.tempFilePath)
+        } else {
+            DDLogWarn("Unable to start Recording, no capture Session")
+        }
+
         countdownTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(endEyeTracking), userInfo: nil, repeats: false)
     }
 
@@ -246,6 +250,7 @@ class Foo : NSObject {
             captureSession.commitConfiguration()
             self.captureSession = captureSession
 
+            self.recorder = Recorder(movieOutput: self.movieOutput)
             self.beginSession()
         })
     }
@@ -324,19 +329,5 @@ extension Foo: AVCaptureMetadataOutputObjectsDelegate {
             }
         }
         return maxFace
-    }
-}
-
-extension Foo: AVCaptureFileOutputRecordingDelegate {
-    
-    public func capture(_ captureOutput: AVCaptureFileOutput, didStartRecordingToOutputFileAt fileURL: URL, fromConnections connections: [Any]) {
-    }
-    
-    public func capture(_ captureOutput: AVCaptureFileOutput, didFinishRecordingToOutputFileAt outputFileURL: URL, fromConnections connections: [Any], error: Error?) {
-        if let theError = error {
-            DDLogError("Unable to save video to the iPhone  \(theError.localizedDescription)")
-        } else {
-            DDLogInfo("Did Finish Recording... could do something with it right now...")
-        }
     }
 }
