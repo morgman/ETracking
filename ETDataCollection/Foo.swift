@@ -18,7 +18,6 @@ class Foo : NSObject {
     var bounds: CGRect?
     var recorder: Recorder?
     
-    fileprivate var commentPlayer = AVPlayer()
     fileprivate var sessionQueue: DispatchQueue = DispatchQueue(label: "videoQueue", attributes: [])
     fileprivate var setupResult: SessionSetupResult = .success
     fileprivate var tempFilePath: URL = {
@@ -158,19 +157,8 @@ class Foo : NSObject {
         recorder?.stopRecording()
         
         DispatchQueue.main.async(execute: { () -> Void in
-            if let previewView = self.previewView {
-                previewView.isHidden = false
-                self.commentPlayer = AVPlayer()
-                self.commentPlayer = AVPlayer.init(url: self.tempFilePath)//[AVPlayer playerWithURL:fileURL];
-                self.commentPlayer.actionAtItemEnd = .none
-
-                let aPlayerLayer = AVPlayerLayer.init(player: self.commentPlayer)
-                aPlayerLayer.backgroundColor = UIColor.blue.cgColor
-                previewView.layer.addSublayer(aPlayerLayer)
-                aPlayerLayer.frame = previewView.bounds
-                aPlayerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
-                self.commentPlayer.play()
-            }
+            let player = Player()
+            player.play(previewView: self.previewView!, tempFilePath: self.tempFilePath)
 
             let videoFailedAlert = UIAlertController(title: "Recording complete", message: "View recording at \(self.tempFilePath)", preferredStyle: UIAlertControllerStyle.alert)
             videoFailedAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction) in
