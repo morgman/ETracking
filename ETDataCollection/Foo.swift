@@ -155,17 +155,9 @@ class Foo : NSObject {
             DDLogWarn("recorder variables null unable to begin session.")
         }
     }
-    
-    func stopRecording() {
-        
-        movieOutput.stopRecording()
-        
-        DDLogInfo("Stop Recording of comment. stored at \(self.tempFilePath)")
-        self.captureSession?.stopRunning()
-    }
 
     func endEyeTracking() {
-        self.stopRecording()
+        recorder?.stopRecording()
         
         DispatchQueue.main.async(execute: { () -> Void in
             if let previewView = self.previewView {
@@ -181,7 +173,7 @@ class Foo : NSObject {
                 aPlayerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
                 self.commentPlayer.play()
             }
-            
+
             let videoFailedAlert = UIAlertController(title: "Recording complete", message: "View recording at \(self.tempFilePath)", preferredStyle: UIAlertControllerStyle.alert)
             videoFailedAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction) in
                 DDLogWarn("Placeholder")
@@ -193,12 +185,7 @@ class Foo : NSObject {
     }
 
     open func captureUserMovement() {
-        if let _ = self.captureSession {
-            recorder?.startRecording(tempFilePath: self.tempFilePath)
-        } else {
-            DDLogWarn("Unable to start Recording, no capture Session")
-        }
-
+        recorder?.startRecording()
         countdownTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(endEyeTracking), userInfo: nil, repeats: false)
     }
 
@@ -240,7 +227,6 @@ class Foo : NSObject {
 
     func videoSetup() {
         DDLogInfo("Setting up Video")
-        movieOutput = AVCaptureMovieFileOutput()
         DispatchQueue.main.async(execute: { () -> Void in
             self.captureDevice = DeviceUtil().getFrontCameraDevice()
 
@@ -250,7 +236,11 @@ class Foo : NSObject {
             captureSession.commitConfiguration()
             self.captureSession = captureSession
 
-            self.recorder = Recorder(movieOutput: self.movieOutput)
+            self.recorder = Recorder(
+                captureSession: self.captureSession!,
+                movieOutput: self.movieOutput,
+                tempFilePath: self.tempFilePath)
+
             self.beginSession()
         })
     }

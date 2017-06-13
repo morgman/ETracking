@@ -3,14 +3,33 @@ import AVFoundation
 
 class Recorder : NSObject {
     var movieOutput:AVCaptureMovieFileOutput?
+    var captureSession:AVCaptureSession?
+    var tempFilePath: URL?
     
-    init(movieOutput: AVCaptureMovieFileOutput) {
+    init(captureSession: AVCaptureSession,
+        movieOutput: AVCaptureMovieFileOutput,
+        tempFilePath: URL) {
+
+        self.tempFilePath = tempFilePath
+        self.captureSession = captureSession
         self.movieOutput = movieOutput
     }
     
-    open func startRecording(tempFilePath: URL) {
-        movieOutput?.startRecording(toOutputFileURL: tempFilePath, recordingDelegate: self)
+    open func startRecording() {
+        if let _ = self.captureSession {
+            movieOutput?.startRecording(toOutputFileURL: self.tempFilePath, recordingDelegate: self)
+        } else {
+            DDLogWarn("Unable to start Recording, no capture Session")
+        }
     }
+
+    open func stopRecording() {
+        self.movieOutput?.stopRecording()
+
+        DDLogInfo("Stop Recording of comment. stored at \(String(describing: self.tempFilePath))")
+        self.captureSession?.stopRunning()
+    }
+
 }
 
 extension Recorder: AVCaptureFileOutputRecordingDelegate {
