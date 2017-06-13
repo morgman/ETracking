@@ -137,7 +137,6 @@ class Foo : NSObject {
             } else {
                 DDLogWarn("Cannot add metadataOutput to capture Session")
             }
-            captureSession.addOutput(self.movieOutput)
             
             if let theError = err {
                 DDLogError("error: \(theError.localizedDescription)")

@@ -13,6 +13,8 @@ class Recorder : NSObject {
         self.tempFilePath = tempFilePath
         self.captureSession = captureSession
         self.movieOutput = movieOutput
+
+        self.captureSession?.addOutput(self.movieOutput)
     }
     
     open func startRecording() {
