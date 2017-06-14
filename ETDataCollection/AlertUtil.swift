@@ -19,4 +19,22 @@ struct AlertUtil {
         
         return videoFailedAlert
     }
+    
+    func getPermissionGrantedAlert(handler: ((UIAlertAction) -> Swift.Void)?) -> UIAlertController? {
+        DDLogInfo("Display Alert indicating Test should start")
+        
+        let videoFailedAlert = UIAlertController(
+            title: "Permission Granted",
+            message: "Start Testing Now...",
+            preferredStyle: UIAlertControllerStyle.alert
+        )
+        
+        videoFailedAlert.addAction(UIAlertAction(
+            title: "Ok",
+            style: .default,
+            handler: handler
+        ))
+        
+        return videoFailedAlert
+    }
 }

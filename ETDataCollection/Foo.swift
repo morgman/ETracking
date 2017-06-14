@@ -80,25 +80,16 @@ class Foo : NSObject {
 
     open func processRecordingPermission(_ notification: Notification) {
         if self.setupResult == .success {
-            DispatchQueue.main.async(execute: { () -> Void in
-                DDLogInfo("Display Alert indicating Test should start")
-                
-                let videoFailedAlert = UIAlertController(
-                    title: "Permission Granted",
-                    message: "Start Testing Now...",
-                    preferredStyle: UIAlertControllerStyle.alert)
-
-                videoFailedAlert.addAction(UIAlertAction(
-                    title: "Ok",
-                    style: .default,
-                    handler: { (action: UIAlertAction) in
-                        DDLogWarn("Placeholder")
-                        self.videoSetup()
-                        self.captureUserMovement()
-                    }
-                ))
-                
-                self.alert!(videoFailedAlert)
+            DispatchQueue.main.async(execute: { () -> Void in                
+                self.alert!(
+                    AlertUtil().getPermissionGrantedAlert(
+                        handler: { (action: UIAlertAction) in
+                            DDLogWarn("Placeholder")
+                            self.videoSetup()
+                            self.captureUserMovement()
+                        }
+                    )!
+                )
             })
         } else {
             DispatchQueue.main.async(execute: { () -> Void in
