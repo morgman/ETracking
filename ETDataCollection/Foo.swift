@@ -192,18 +192,11 @@ class Foo : NSObject {
     func videoSetup() {
         DDLogInfo("Setting up Video")
         DispatchQueue.main.async(execute: { () -> Void in
-            self.captureDevice = DeviceUtil().getFrontCameraDevice()
-
-            let captureSession = AVCaptureSession()
-            captureSession.beginConfiguration ()
-            captureSession.sessionPreset = AVCaptureSessionPresetHigh
-            captureSession.commitConfiguration()
-            self.captureSession = captureSession
-
-            self.recorder = Recorder(
-                captureSession: self.captureSession!,
-                tempFilePath: self.tempFilePath)
-
+            let videoSession = VideoSession(tempFilePath: self.tempFilePath)
+            
+            self.captureDevice = videoSession.getCaptureDevice()
+            self.captureSession = videoSession.getCaptureSession()
+            self.recorder = videoSession.getRecorder()
             self.beginSession()
         })
     }
