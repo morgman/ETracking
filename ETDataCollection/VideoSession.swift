@@ -2,9 +2,9 @@ import AVFoundation
 import CocoaLumberjack
 
 class VideoSession {
-    var captureDevice:AVCaptureDevice?
-    var captureSession:AVCaptureSession?
-    var recorder: Recorder?
+    let captureDevice:AVCaptureDevice?
+    let captureSession:AVCaptureSession?
+    let recorder: Recorder?
 
     init(tempFilePath: URL) {
         self.captureDevice = DeviceUtil().getFrontCameraDevice()
