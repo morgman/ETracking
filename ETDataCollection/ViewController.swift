@@ -459,3 +459,35 @@ extension ViewController:  AVCaptureFileOutputRecordingDelegate {
     }
 }
 
+extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        return 2
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        
+        return 2
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        var cell:UICollectionViewCell?
+        if let aCell = collectionView.dequeueReusableCell(withReuseIdentifier: "TestCollectionViewCell", for: indexPath) as? TestCollectionViewCell {
+            
+            return aCell
+        } else {
+            cell = TestCollectionViewCell.init()
+        }
+
+        return UICollectionViewCell.init()
+    }
+    
+    func collectionView(collectionView: UICollectionView!, layout: UICollectionViewLayout!, sizeForItemAtIndexPath indexPath: NSIndexPath!) -> CGSize {
+     
+        return CGSize(width: 150, height: 200)
+    }
+
+}
