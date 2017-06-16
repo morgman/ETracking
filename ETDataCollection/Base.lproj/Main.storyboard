@@ -61,7 +61,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="GreenDot" translatesAutoresizingMaskIntoConstraints="NO" id="2Lw-Y8-bGo">
-                                                    <rect key="frame" x="43" y="60" width="64" height="64"/>
+                                                    <rect key="frame" x="43" y="68" width="64" height="64"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="64" id="lzD-Ey-PBY"/>
                                                         <constraint firstAttribute="height" constant="64" id="sTM-RI-Ve2"/>
@@ -69,6 +69,7 @@
                                                 </imageView>
                                             </subviews>
                                         </view>
+                                        <color key="backgroundColor" red="0.567784277" green="0.86935833900000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstItem="2Lw-Y8-bGo" firstAttribute="centerX" secondItem="3ch-H6-o0z" secondAttribute="centerX" id="d78-hQ-QDS"/>
                                             <constraint firstItem="2Lw-Y8-bGo" firstAttribute="centerY" secondItem="3ch-H6-o0z" secondAttribute="centerY" id="mc8-NA-BgS"/>
@@ -76,6 +77,10 @@
                                         <size key="customSize" width="150" height="200"/>
                                     </collectionViewCell>
                                 </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="1lZ-L3-EMb"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="2AY-VM-UUM"/>
+                                </connections>
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -29,6 +29,9 @@ class ViewController: UIViewController {
     fileprivate var commentPlayer = AVPlayer()
 
 
+    var gridWidth:CGFloat?
+    var gridHeight:CGFloat?
+    
     var stillImageOutput:AVCaptureStillImageOutput?
     var countdownTimer:Timer?
     var captureSession:AVCaptureSession?
@@ -464,30 +467,40 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        return 2
+        if let theWidth = self.gridWidth {
+            return Int(theWidth)
+        } else {
+            return 2
+        }
+        
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         
-        return 2
+        if let theHeight = self.gridHeight {
+            return Int(theHeight)
+        } else {
+            return 2
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        var cell:UICollectionViewCell?
         if let aCell = collectionView.dequeueReusableCell(withReuseIdentifier: "TestCollectionViewCell", for: indexPath) as? TestCollectionViewCell {
             
             return aCell
-        } else {
-            cell = TestCollectionViewCell.init()
         }
-
         return UICollectionViewCell.init()
     }
     
     func collectionView(collectionView: UICollectionView!, layout: UICollectionViewLayout!, sizeForItemAtIndexPath indexPath: NSIndexPath!) -> CGSize {
      
-        return CGSize(width: 150, height: 200)
+        guard let theWidth = self.gridWidth, let theHeight = self.gridHeight else { return  CGSize(width:100, height:100) }
+        
+        let cellWidth = self.view.frame.width / theWidth
+        let cellHeight = self.view.frame.height / theHeight
+        
+        return CGSize(width: cellWidth, height: cellHeight)
     }
 
 }
