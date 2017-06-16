@@ -16,6 +16,7 @@ import Photos
 class ViewController: UIViewController {
 
     @IBOutlet open weak var previewView: UIView?
+    @IBOutlet open weak var collectionView: UICollectionView?
     
     fileprivate enum SessionSetupResult {
         case initializing
@@ -73,6 +74,15 @@ class ViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.processRecordingPermission), name: NSNotification.Name(rawValue: self.recordingPermissionCompleted), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.itemDidFinishPlaying), name:NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
 
+        if let aCollectionView = self.collectionView {
+            let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+            layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            layout.minimumInteritemSpacing = 0
+            layout.minimumLineSpacing = 0
+            aCollectionView.collectionViewLayout = layout
+        }
+        
+        self.navigationController?.isNavigationBarHidden = true
         
         if let previewView = self.previewView {
             previewView.isHidden = true
@@ -462,7 +472,7 @@ extension ViewController:  AVCaptureFileOutputRecordingDelegate {
     }
 }
 
-extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -487,13 +497,17 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if let aCell = collectionView.dequeueReusableCell(withReuseIdentifier: "TestCollectionViewCell", for: indexPath) as? TestCollectionViewCell {
-            
+            aCell.layer.borderColor = UIColor.black.cgColor
+            aCell.layer.borderWidth = 1
+
             return aCell
         }
         return UICollectionViewCell.init()
     }
     
-    func collectionView(collectionView: UICollectionView!, layout: UICollectionViewLayout!, sizeForItemAtIndexPath indexPath: NSIndexPath!) -> CGSize {
+     func collectionView(_ collectionView: UICollectionView,
+                                 layout collectionViewLayout: UICollectionViewLayout,
+                                 sizeForItemAt indexPath: IndexPath) -> CGSize {
      
         guard let theWidth = self.gridWidth, let theHeight = self.gridHeight else { return  CGSize(width:100, height:100) }
         
