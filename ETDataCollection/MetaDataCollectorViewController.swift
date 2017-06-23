@@ -29,8 +29,8 @@ class MetaDataCollectorViewController: UIViewController {
             
             if let aCameraViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ViewController") as? ViewController {
                 aCameraViewController.navigationController?.isNavigationBarHidden = true
-                aCameraViewController.gridWidth = CGFloat(widthValue)
-                aCameraViewController.gridHeight = CGFloat(heightValue)
+                aCameraViewController.numberOfItemsInSection = CGFloat(widthValue)
+                aCameraViewController.numberOfSections = CGFloat(heightValue)
                 self.navigationController?.pushViewController(aCameraViewController, animated: true)
             } else {
                 DDLogWarn("Unable to display camera viewcontroller.")

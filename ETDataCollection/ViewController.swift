@@ -30,8 +30,11 @@ class ViewController: UIViewController {
     fileprivate var commentPlayer = AVPlayer()
 
 
-    var gridWidth:CGFloat?
-    var gridHeight:CGFloat?
+    var numberOfItemsInSection:CGFloat?
+    var numberOfSections:CGFloat?
+    
+    var currentItem:CGFloat?
+    var currentSection:CGFloat?
     
     var stillImageOutput:AVCaptureStillImageOutput?
     var countdownTimer:Timer?
@@ -70,6 +73,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        self.currentItem = 0
+        self.currentSection = 0
+
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.processRecordingPermission), name: NSNotification.Name(rawValue: self.recordingPermissionCompleted), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.itemDidFinishPlaying), name:NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
@@ -340,7 +347,7 @@ class ViewController: UIViewController {
             }
 
             
-            let videoFailedAlert = UIAlertController(title: "Recording complete", message: "View recording at \(self.tempFilePath)", preferredStyle: UIAlertControllerStyle.alert)
+            let videoFailedAlert = UIAlertController(title: "Recording complete", message: "Check your photo album for all images that contained a face.", preferredStyle: UIAlertControllerStyle.alert)
             videoFailedAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction) in
                 DDLogWarn("Placeholder")
             }))
@@ -355,7 +362,39 @@ class ViewController: UIViewController {
     open func captureUserMovement() {
         
         self.startRecording()
-        countdownTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(endEyeTracking), userInfo: nil, repeats: false)
+        self.currentItem = 0
+        self.currentSection = 0
+        self.collectionView?.reloadData()
+        countdownTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(movedot), userInfo: nil, repeats: true)
+    }
+    
+    
+    open func movedot() {
+        
+        guard let currentItem = self.currentItem, let currentSection = self.currentSection, let numberOfItemsInSection = self.numberOfItemsInSection, let numberOfSections = self.numberOfSections else {
+            
+            if let theTimer = self.countdownTimer {
+                theTimer.invalidate()
+            }
+            DDLogWarn("Unable to move dot, nil values, timer invalidated")
+            return
+        }
+        
+        if currentItem < numberOfItemsInSection-1{
+            self.currentItem? += 1.0
+        } else {
+            self.currentItem? = 0
+            
+            if currentSection < numberOfSections-1 {
+                self.currentSection? += 1.0
+            } else {
+                if let theTimer = self.countdownTimer {
+                    theTimer.invalidate()
+                    self.endEyeTracking()
+                }
+            }
+        }
+        self.collectionView?.reloadData()
     }
 }
 
@@ -379,7 +418,7 @@ extension ViewController:  AVCaptureMetadataOutputObjectsDelegate {
         }
         
         if faces.count > 0 {
-            DDLogInfo("Face Count == \(faces.count)")
+           // DDLogInfo("Face Count == \(faces.count)")
 //            var newColor = UIColor.red.cgColor
 //            var newWidth:CGFloat = 3.0
             let maxFaceRect = self.findMaxFaceRect(faces)
@@ -424,7 +463,7 @@ extension ViewController:  AVCaptureMetadataOutputObjectsDelegate {
 //            }
             
         } else {
-            DDLogInfo("Face Count == 0")
+            //DDLogInfo("Face Count == 0")
         }
     }
     
@@ -477,7 +516,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if let theWidth = self.gridWidth {
+        if let theWidth = self.numberOfItemsInSection {
             return Int(theWidth)
         } else {
             return 2
@@ -487,7 +526,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         
-        if let theHeight = self.gridHeight {
+        if let theHeight = self.numberOfSections {
             return Int(theHeight)
         } else {
             return 2
@@ -496,9 +535,24 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
+        guard let currentItem = self.currentItem, let currentSection = self.currentSection, let numberOfItemsInSection = self.numberOfItemsInSection, let numberOfSections = self.numberOfSections else {
+            
+            DDLogWarn("Unable to move dot, nil values, timer invalidated")
+            return UICollectionViewCell.init()
+        }
+
+        
         if let aCell = collectionView.dequeueReusableCell(withReuseIdentifier: "TestCollectionViewCell", for: indexPath) as? TestCollectionViewCell {
             aCell.layer.borderColor = UIColor.black.cgColor
             aCell.layer.borderWidth = 1
+            
+            aCell.dotImage?.isHidden = true
+            DDLogInfo("dot (\(currentItem),\(currentSection) current cell (\(indexPath.item),\(indexPath.section))")
+            if let theCurrentItem = self.currentItem, theCurrentItem == CGFloat(indexPath.item) {
+                if let theCurrentSection = self.currentSection, theCurrentSection == CGFloat(indexPath.section) {
+                    aCell.dotImage?.isHidden = false
+                }
+            }
 
             return aCell
         }
@@ -509,7 +563,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
                                  layout collectionViewLayout: UICollectionViewLayout,
                                  sizeForItemAt indexPath: IndexPath) -> CGSize {
      
-        guard let theWidth = self.gridWidth, let theHeight = self.gridHeight else { return  CGSize(width:100, height:100) }
+        guard let theWidth = self.numberOfItemsInSection, let theHeight = self.numberOfSections else { return  CGSize(width:100, height:100) }
         
         let cellWidth = self.view.frame.width / theWidth
         let cellHeight = self.view.frame.height / theHeight

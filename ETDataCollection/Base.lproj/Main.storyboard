@@ -60,7 +60,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="150" height="200"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="GreenDot" translatesAutoresizingMaskIntoConstraints="NO" id="2Lw-Y8-bGo">
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="GreenDot" translatesAutoresizingMaskIntoConstraints="NO" id="2Lw-Y8-bGo">
                                                     <rect key="frame" x="43" y="68" width="64" height="64"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="64" id="lzD-Ey-PBY"/>
@@ -75,6 +75,9 @@
                                             <constraint firstItem="2Lw-Y8-bGo" firstAttribute="centerY" secondItem="3ch-H6-o0z" secondAttribute="centerY" id="mc8-NA-BgS"/>
                                         </constraints>
                                         <size key="customSize" width="150" height="200"/>
+                                        <connections>
+                                            <outlet property="dotImage" destination="2Lw-Y8-bGo" id="oB7-gu-erY"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                                 <connections>

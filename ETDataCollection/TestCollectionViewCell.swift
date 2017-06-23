@@ -11,5 +11,6 @@ import Foundation
 
 class TestCollectionViewCell: UICollectionViewCell {
 
+    @IBOutlet open weak var dotImage: UIImageView?
 
 }
