@@ -46,6 +46,11 @@ class ViewController: UIViewController {
     fileprivate var sessionQueue: DispatchQueue = DispatchQueue(label: "videoQueue", attributes: [])
     let recordingPermissionCompleted = "recordingPermissionCompleted"
     var movieOutput = AVCaptureMovieFileOutput()
+    
+    var theCIContext:CIContext?
+    var theCIDetector:CIDetector?
+    
+    
     fileprivate var tempFilePath: URL = {
         let tempPath = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("tmpComment").appendingPathExtension("mp4")
         if FileManager.default.fileExists(atPath: tempPath.absoluteString) {
@@ -394,7 +399,11 @@ class ViewController: UIViewController {
                 }
             }
         }
+        DDLogInfo("Moving dot, new location \(self.currentItem!),\(self.currentSection!)")
+        DispatchQueue.main.async(execute: { () -> Void in
+
         self.collectionView?.reloadData()
+        })
     }
 }
 
@@ -418,9 +427,6 @@ extension ViewController:  AVCaptureMetadataOutputObjectsDelegate {
         }
         
         if faces.count > 0 {
-           // DDLogInfo("Face Count == \(faces.count)")
-//            var newColor = UIColor.red.cgColor
-//            var newWidth:CGFloat = 3.0
             let maxFaceRect = self.findMaxFaceRect(faces)
             
             if let videoConnection = self.stillImageOutput, let validatedConnection = videoConnection.connection(withMediaType: AVMediaTypeVideo) {
@@ -429,42 +435,85 @@ extension ViewController:  AVCaptureMetadataOutputObjectsDelegate {
                     
                     if let validatedError = error {
                         DDLogWarn("Error capturing Still Image error = \(validatedError)")
-
+                        
                     } else {
-                    if let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer) {
-                        if let validUIImage = UIImage(data: imageData) {
-                            UIImageWriteToSavedPhotosAlbum(validUIImage, nil, nil, nil)
+                        if let sampleBuffer = imageDataSampleBuffer,
+                            let imageData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: sampleBuffer, previewPhotoSampleBuffer: nil),
+                        let currentItem = self.currentItem, let currentSection = self.currentSection {
+                        
+//                        if let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer) {
+                            
+                            // TODO:  Eventually break this into a function.
+                            // create an image with face rect, eye location encoded into the EXIF meta data along with 
+                            // other meta data, x,y of where SHOULD be looking, test date, etc.
+                            
+                            let detectedFeatureMutableDict = self.updateImageDataWithTestResults(imageData, maxFaceRect: maxFaceRect)
+                            detectedFeatureMutableDict["testData"] = "March 13, 2016"
+                            detectedFeatureMutableDict["targetCoordinate"] = NSStringFromCGPoint(CGPoint.init(x: currentItem, y: currentSection))
+                            
+                            do {
+                                let jsonData = try JSONSerialization.data(withJSONObject: detectedFeatureMutableDict, options: .prettyPrinted)
+                                if let theString = String.init(data: jsonData, encoding: String.Encoding.utf8 ) {
+                                    DDLogInfo("Feature JSON to add to image EXIF data \(theString)")
+                                } else {
+                                    DDLogWarn("Unable to encode features into JSON")
+                                }
+                            } catch {
+                                DDLogError("ERROR serializing found features into json \(error.localizedDescription)")
+                            }
+                            
+                            
+                            if let validUIImage = UIImage(data: imageData) {
+                                UIImageWriteToSavedPhotosAlbum(validUIImage, nil, nil, nil)
+                            } else {
+                                DDLogWarn("Valid UIImage could not be created from data")
+                            }
                         } else {
-                            DDLogWarn("Valid UIImage could not be created from data")
+                            DDLogWarn("No Image Data to save")
                         }
-                    } else {
-                        DDLogWarn("No Image Data to save")
-                    }
                     }
                 }
             }
-            
-//            if let recorderGuideView = self.recorderGuideView {
-//                let faceGuideIntersection = recorderGuideView.frame.intersection(maxFaceRect)
-//                if faceGuideIntersection != CGRect.null {
-//                    let intersectionArea = faceGuideIntersection.width * faceGuideIntersection.height
-//                    let guideArea = recorderGuideView.frame.size.width * recorderGuideView.frame.height
-//                    let percentInGuide = Float(intersectionArea / guideArea)
-//                    let greaterThanThreshold = (percentInGuide > 0.7)
-//                    DDLogInfo("Face percent in guide \(percentInGuide) exceedsThreshold? \(greaterThanThreshold)")
-//                    if greaterThanThreshold == true {
-//                        newColor = UIColor.green.cgColor
-//                        newWidth = 1.0
-//                    } else {
-//                        newColor = UIColor.red.cgColor
-//                        newWidth = 3.0
-//                    }
-//                }
-//            }
-            
         } else {
             //DDLogInfo("Face Count == 0")
         }
+    }
+    
+    func updateImageDataWithTestResults(_ imageData:Data, maxFaceRect theFaceRect:CGRect) -> NSMutableDictionary {
+        
+        let featureDict = NSMutableDictionary.init(capacity: 3)
+        
+        // First determine eye location
+        if let ciimage = CIImage.init(data: imageData) {
+            
+            if self.theCIContext == nil {
+                self.theCIContext = CIContext.init(options: nil)
+            }
+            if self.theCIDetector == nil {
+                self.theCIDetector = CIDetector.init(ofType: CIDetectorTypeFace, context: self.theCIContext, options: nil)
+            }
+            
+            if let features = self.theCIDetector?.features(in: ciimage, options: [CIDetectorEyeBlink:true]) {
+                for feature in features {
+                    if feature.isKind(of: CIFaceFeature.self), let faceFeature = feature as? CIFaceFeature {
+                        featureDict["faceBounds"] = NSStringFromCGRect(faceFeature.bounds)
+                        DDLogInfo("Feature \(feature.type) face bounds = \(faceFeature.bounds), leftEyePosition = \(faceFeature.leftEyePosition), rightEyePosition = \(faceFeature.rightEyePosition)")
+                        if faceFeature.hasLeftEyePosition {
+                            featureDict["leftEyePosition"] = NSStringFromCGPoint(faceFeature.leftEyePosition)
+                        }
+                        if faceFeature.hasRightEyePosition {
+                            featureDict["rightEyePosition"] = NSStringFromCGPoint(faceFeature.rightEyePosition)
+                        }
+                    }
+                }
+            } else {
+                DDLogWarn("CIDetector failed to detect anything")
+            }
+        } else {
+            DDLogWarn("No CIImage created!")
+        }
+        
+        return featureDict
     }
     
     func setlayerHidden(_ hidden: Bool) {
