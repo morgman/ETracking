@@ -443,9 +443,10 @@ extension ViewController:  AVCaptureMetadataOutputObjectsDelegate {
                         
 //                        if let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer) {
                             
-                            // TODO:  Eventually break this into a function.
+                            // TODO:  Break this into a function.
                             // create an image with face rect, eye location encoded into the EXIF meta data along with 
                             // other meta data, x,y of where SHOULD be looking, test date, etc.
+
                             
                             let detectedFeatureMutableDict = self.updateImageDataWithTestResults(imageData, maxFaceRect: maxFaceRect)
                             detectedFeatureMutableDict["testData"] = "March 13, 2016"
@@ -484,6 +485,10 @@ extension ViewController:  AVCaptureMetadataOutputObjectsDelegate {
         let featureDict = NSMutableDictionary.init(capacity: 3)
         
         // First determine eye location
+        // TODO:  Not convinced the CIImage initialization is working correctly, 
+        // This all should probably be done after the images are collected, post processing
+        // For now over write the images with detected bounding rects.
+        
         if let ciimage = CIImage.init(data: imageData) {
             
             if self.theCIContext == nil {
@@ -504,6 +509,8 @@ extension ViewController:  AVCaptureMetadataOutputObjectsDelegate {
                         if faceFeature.hasRightEyePosition {
                             featureDict["rightEyePosition"] = NSStringFromCGPoint(faceFeature.rightEyePosition)
                         }
+                    } else {
+                        DDLogWarn("feature is of unknown kind: \(feature)")
                     }
                 }
             } else {
